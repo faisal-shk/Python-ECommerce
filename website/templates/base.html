@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Footer link -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/allmin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootsrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>Inentory Pro | {% block title %}   {% endblock %}</title>
+</head>
+
+<body>
+    
+    <!-- Navbar -navigation -->
+    <div class="">
+        <div class="main-navbar shadow-sm sticky-top">
+            <div class="top-navbar">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
+                            <h5 class="brand-name">Inentory Pro</h5>
+                        </div>
+                        <div class="col-md-5 my-auto">
+                            <form role="search">
+                                <div class="input-group">
+                                    <input type="search" placeholder="Search your product" class="form-control"
+                                        area-label="search">
+                                    <button class="btn bg-white" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-5 my-auto">
+                            <ul class="nav justify-content-end">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fa fa-shopping-cart"></i> Cart (0)
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fa fa-heart"></i> Wishlist (0)
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                <li type="button" class="nav-link dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    Username
+                                </li>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    {% if current_user.is_authenticated %}
+
+                                    <li class="dropdown-item" type="button"><a href="/profile/{{ current_user.id }}"><i
+                                                class="fa fa-user"></i>Profile </a></li>
+                                    <li class="dropdown-item" type="button"><a href="#"><i class="fa fa-list"></i>My
+                                            Orders </a></li>
+                                    <li class="dropdown-item" type="button"><a href="/logout"><i
+                                                class="fa fa-sign-out"></i>Logout </a></li>
+
+                                    {% else %}
+
+                                    <li class="dropdown-item" type="button"><a href="/login"><i
+                                                class="fa fa-shopping-cart"></i>Login </a></li>
+
+                                    {% endif %}
+                                </div>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav class="navbar navbar-expand-lg bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-block d-sm-block d-md-none d-lg-none" href="#">
+                        Inentory Pro
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Electronics</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Fashions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Accessories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">New Arrivals</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Featured Products</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </div>
+
+
+    {% for message in get_flashed_messages() %}
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 5px;">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <!-- Content Comes here -->
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- Footer -->
+
+    <footer class="modern-footer pt-5 mb-0">
+        <div class="container footer-content">
+            <div class="row g-4 mb-5">
+                <!-- Company Info -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="#" class="footer-logo d-block mb-4">
+                        Flask-Commerce<span class="text-primary">.</span>
+                    </a>
+                    <p class="text-muted mb-4">ecommerce website developed using flask python bootsrap and others</p>
+                    <ul class="contact-info mb-4">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Business Avenue, Suite 100<br>New York, NY 10001</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>contact@flaskcommerce.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-4 col-md-6">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="quick-links">
+                        <li><a href="#">Our Services</a></li>
+                        <li><a href="#">About Company</a></li>
+                        <li><a href="#">Latest Projects</a></li>
+                        <li><a href="#">Recent News</a></li>
+                        <li><a href="#">Customer Support</a></li>
+                        <li><a href="#">Contact Details</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-4 col-md-12">
+                    <h3 class="footer-title">Stay Connected</h3>
+                    <p class="text-muted mb-4">Subscribe to our newsletter and stay updated with the latest news and
+                        insights.</p>
+                    <form class="mb-4">
+                        <div class="mb-3">
+                            <input type="email" class="form-control newsletter-input" placeholder="Your email address">
+                        </div>
+                        <button type="submit" class="btn btn-subscribe text-white w-100">Subscribe Now</button>
+                    </form>
+                    <div class="social-links">
+                        <a href="/main.py" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="/main.py" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="/main.py" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="/main.py" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="/main.py" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>  
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row py-4">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p>&copy; 2024 Flask-Commerce. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <p>Made with <i class="fas fa-heart text-danger"></i> by <a href="#">Flask-Commerce</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
