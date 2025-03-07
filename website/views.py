@@ -4,7 +4,6 @@ from flask_login import login_required, current_user
 from . import db
 # from intasend import APIService
 
-
 views = Blueprint('views', __name__)
 
 API_PUBLISHABLE_KEY = 'YOUR_PUBLISHABLE_KEY'
@@ -17,8 +16,7 @@ def home():
 
     items = Product.query.filter_by(flash_sale=True)
 
-    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
-                           if current_user.is_authenticated else [])
+    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all() if current_user.is_authenticated else [])
 
 
 @views.route('/add-to-cart/<int:item_id>')
@@ -69,6 +67,7 @@ def show_cart():
 def plus_cart():
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
+        print (cart_id)
         cart_item = Cart.query.get(cart_id)
         cart_item.quantity = cart_item.quantity + 1
         db.session.commit()
@@ -81,9 +80,10 @@ def plus_cart():
             amount += item.product.current_price * item.quantity
 
         data = {
-            'quantity': cart_item.quantity,
-            'amount': amount,
-            'total': amount + 200
+            'Response : Backend Responce'
+            # 'quantity': cart_item.quantity,
+            # 'amount': amount,
+            # 'total': amount + 200
         }
 
         return jsonify(data)
@@ -199,20 +199,6 @@ def search():
         items = Product.query.filter(Product.product_name.ilike(f'%{search_query}%')).all()
         return render_template('search.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
-
     return render_template('search.html')
 
 
-
-
-
-# ==================================================================================================================================================================================================================
-# from flask import Flask, render_template, request, redirect, url_for
-# from flask import Blueprint
-
-# views = Blueprint('views', __name__) 
-
-# @views.route('/')
-# def home():
-#     return render_template("home.html")
-#     # return "This is Home page" # this is a comment
