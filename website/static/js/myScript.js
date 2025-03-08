@@ -42,7 +42,7 @@ $('.minus-cart').click(function(){
             document.getElementById(`quantity${id}`).innerText = data.quantity
             document.getElementById('amount_tt').innerText = data.amount
             document.getElementById('totalamount').innerText = data.total
-
+            
         }
     })
 })

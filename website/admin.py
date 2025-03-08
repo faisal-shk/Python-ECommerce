@@ -121,7 +121,7 @@ def update_item(item_id):
 
 @admin.route('/delete-item/<int:item_id>', methods=['GET', 'POST'])
 def delete_item(item_id):
-    # if current_user == 9:
+    # if current_user == ADMIN_ID:
         try:
             item_to_delete = Product.query.get(item_id)
             db.session.delete(item_to_delete)
@@ -131,6 +131,6 @@ def delete_item(item_id):
             return redirect('/shop-items')
         except Exception as e:
             print('Item not deleted', e)
-            flash('Item is not deleted')
+            flash(f'Item is not deleted')
             return redirect('/shop-items')
     # return render_template('404.html')
