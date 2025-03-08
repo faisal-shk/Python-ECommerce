@@ -4,7 +4,6 @@ from flask_login import login_required, current_user
 from . import db
 # from intasend import APIService
 
-
 views = Blueprint('views', __name__)
 
 API_PUBLISHABLE_KEY = 'YOUR_PUBLISHABLE_KEY'
@@ -17,8 +16,7 @@ def home():
 
     items = Product.query.filter_by(flash_sale=True)
 
-    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
-                           if current_user.is_authenticated else [])
+    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all() if current_user.is_authenticated else [])
 
 
 @views.route('/add-to-cart/<int:item_id>')
@@ -69,6 +67,7 @@ def show_cart():
 def plus_cart():
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
+        print (cart_id)
         cart_item = Cart.query.get(cart_id)
         cart_item.quantity = cart_item.quantity + 1
         db.session.commit()
@@ -81,6 +80,7 @@ def plus_cart():
             amount += item.product.current_price * item.quantity
 
         data = {
+            'Response : Backend Responce'
             'quantity': cart_item.quantity,
             'amount': amount,
             'total': amount + 200
@@ -137,53 +137,53 @@ def remove_cart():
         }
 
         return jsonify(data)
+#======================================================================================================================================================================================================================================================
 
+@views.route('/place-order')
+@login_required
+def place_order():
+    customer_cart = Cart.query.filter_by(customer_link=current_user.id)
+    if customer_cart:
+        try:
+            total = 0
+            for item in customer_cart:
+                total += item.product.current_price * item.quantity
 
-# @views.route('/place-order')
-# @login_required
-# def place_order():
-#     customer_cart = Cart.query.filter_by(customer_link=current_user.id)
-#     if customer_cart:
-#         try:
-#             total = 0
-#             for item in customer_cart:
-#                 total += item.product.current_price * item.quantity
+            # service = APIService(token=API_TOKEN, publishable_key=API_PUBLISHABLE_KEY, test=True)
+            create_order_response = service.collect.mpesa_stk_push(phone_number='YOUR_NUMBER ', email=current_user.email,
+                                                                   amount=total + 200, narrative='Purchase of goods')
 
-#             # service = APIService(token=API_TOKEN, publishable_key=API_PUBLISHABLE_KEY, test=True)
-#             create_order_response = service.collect.mpesa_stk_push(phone_number='YOUR_NUMBER ', email=current_user.email,
-#                                                                    amount=total + 200, narrative='Purchase of goods')
+            for item in customer_cart:
+                new_order = Order()
+                new_order.quantity = item.quantity
+                new_order.price = item.product.current_price
+                new_order.status = create_order_response['invoice']['state'].capitalize()
+                new_order.payment_id = create_order_response['id']
 
-#             for item in customer_cart:
-#                 new_order = Order()
-#                 new_order.quantity = item.quantity
-#                 new_order.price = item.product.current_price
-#                 new_order.status = create_order_response['invoice']['state'].capitalize()
-#                 new_order.payment_id = create_order_response['id']
+                new_order.product_link = item.product_link
+                new_order.customer_link = item.customer_link
 
-#                 new_order.product_link = item.product_link
-#                 new_order.customer_link = item.customer_link
+                db.session.add(new_order)
 
-#                 db.session.add(new_order)
+                product = Product.query.get(item.product_link)
 
-#                 product = Product.query.get(item.product_link)
+                product.in_stock -= item.quantity
 
-#                 product.in_stock -= item.quantity
+                db.session.delete(item)
 
-#                 db.session.delete(item)
+                db.session.commit()
 
-#                 db.session.commit()
+            flash('Order Placed Successfully')
 
-#             flash('Order Placed Successfully')
-
-#             return redirect('/orders')
-#         except Exception as e:
-#             print(e)
-#             flash('Order not placed')
-#             return redirect('/')
-#     else:
-#         flash('Your cart is Empty')
-#         return redirect('/')
-
+            return redirect('/orders')
+        except Exception as e:
+            print(e)
+            flash('Order not placed')
+            return redirect('/')
+    else:
+        flash('Your cart is Empty')
+        return redirect('/')
+#=======================================================================================================================================================================================================================================================
 
 @views.route('/orders')
 @login_required
@@ -199,20 +199,6 @@ def search():
         items = Product.query.filter(Product.product_name.ilike(f'%{search_query}%')).all()
         return render_template('search.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
-
     return render_template('search.html')
 
 
-
-
-
-# ==================================================================================================================================================================================================================
-# from flask import Flask, render_template, request, redirect, url_for
-# from flask import Blueprint
-
-# views = Blueprint('views', __name__) 
-
-# @views.route('/')
-# def home():
-#     return render_template("home.html")
-#     # return "This is Home page" # this is a comment

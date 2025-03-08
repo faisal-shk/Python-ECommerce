@@ -10,6 +10,7 @@ import os
 
 admin = Blueprint('admin', __name__)
 
+
 @admin.route('/media/<path:filename>')
 def get_image(filename):
     return send_from_directory('../media', filename)
@@ -62,9 +63,6 @@ def add_shop_items():
 
     return render_template('404.html') #activate this after testing
 
-    # form = ShopItemsForm()
-    # return render_template('add_shop_items.html', form=form)#just for testing
-    
     
 # =====================================================================================
 ADMIN_ID = 9 #create this variable, so in the future you can change only this variable.
@@ -120,3 +118,19 @@ def update_item(item_id):
             
         return render_template('update_item.html', form=form)
     return render_template('404.html')
+
+@admin.route('/delete-item/<int:item_id>', methods=['GET', 'POST'])
+def delete_item(item_id):
+    # if current_user == ADMIN_ID:
+        try:
+            item_to_delete = Product.query.get(item_id)
+            db.session.delete(item_to_delete)
+            db.session.commit()
+            flash(f'{item_to_delete.product_name} Deleted Successfully')
+            print('Product Deleted Successfully')
+            return redirect('/shop-items')
+        except Exception as e:
+            print('Item not deleted', e)
+            flash(f'Item is not deleted')
+            return redirect('/shop-items')
+    # return render_template('404.html')

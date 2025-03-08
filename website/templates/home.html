@@ -2,6 +2,7 @@
 
 {% block content%}
 
+
 <div class="container-fluid text-center">
     <div class="row" style="margin: 10px">
         <div class="col" style="margin: 3px">
@@ -108,15 +109,14 @@
                 margin-left: -40px;
                 font-weight: 600;
               ">
-                            SELL ON AMAZON
+                            SELL ON Flask-Commerce
                         </h6>
                         <p style="
                 font-size: small;
                 color: gray;
                 margin-left: -30px;
                 margin-top: -10px;
-              ">
-                            FBA Program
+              ">    FBA Program
                         </p>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
         margin: 5px;
       ">
             <img src="../static/images/food.png" alt="" style="width: 30px; height: 30px" />
-            <h6 style="margin: 4px">flaskcommerce Food</h6>
+            <h6 style="margin: 4px">Flaskcommerce Food</h6>
         </div>
         <div class="col" style="
         display: flex;
@@ -183,7 +183,7 @@
             <img src="{{ item.product_picture }}" alt="" style="height: 202px; width: 180px; border-radius: 10px" />
 
             <div class="row" style="margin-top: 5px">
-                <h6 style="color: gray">{{ item.product_name }}</h6>
+                <h6 class="text-center" style="color: gray">{{ item.product_name }}</h6>
             </div>
 
             <div class="row" style="margin-top: 10px">
@@ -192,15 +192,15 @@
               font-weight: 600;
               font-family: 'Times New Roman', Times, serif;
             ">
-                        Ksh {{ item.current_price }}
+                        Rs. {{ item.current_price }}
                     </h5>
                     <strike>
-                        <p style="color: gray">Ksh {{ item.previous_price}}</p>
+                        <p style="color: gray">Rs. {{ item.previous_price}}</p>
                     </strike>
                 </div>
 
                 <div class="col">
-                    <a href="/add-to-cart/{{ item.id }}">Add</a>
+                    <a class="btn btn-warning" href="/add-to-cart/{{ item.id }}">Add</a>
                 </div>
             </div>
 
